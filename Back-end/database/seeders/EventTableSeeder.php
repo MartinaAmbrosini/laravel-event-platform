@@ -19,6 +19,13 @@ class EventTableSeeder extends Seeder
     {
         Event::factory()
             ->count(20)
-            ->create();
+            ->make();
+        // ->each(function ($events) {
+
+        //     $tags = Tag::inRandomOrder()->first();
+        //     $events->tag()->associate($tags);
+
+        //     $events->save();
+        // })
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Event;
+use App\Models\Tag;
 
 class EventController extends Controller
 {
@@ -15,7 +16,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('event.home');
+        $events = Event::all();
+
+        return view('event.home', compact('events'));
     }
 
     /**
@@ -25,7 +28,10 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        // $tags = Tag::all();
+        $events = Event::all();
+
+        return view('event.create', compact('events'));
     }
 
     /**
@@ -36,7 +42,24 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        // $image = $data['image'];
+        // $image_path = Storage::disk('public')->put('images', $image);
+        // $type = Type::find($data['type_id']);
+
+        $newEvent = new Event();
+
+        $newEvent->name = $data['name'];
+        $newEvent->description = $data['description'];
+        // $newEvent->image = $image_path;
+        $newEvent->start_date = $data['start_date'];
+        $newEvent->end_date = $data['end_date'];
+
+        $newEvent->save();
+
+        // $newEvent->tags()->attach($data['tag_id']);
+
+        return redirect()->route('event.home');
     }
 
     /**
@@ -47,7 +70,9 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $event = Event::find($id);
+
+        return view('event.show', compact('event'));
     }
 
     /**
@@ -58,7 +83,11 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        // $tags = Tag::all();
+
+        $event = Event::find($id);
+
+        return view('event.edit', compact('event'));
     }
 
     /**
@@ -70,7 +99,23 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        // $type = Type::find($data['type_id']);
+
+        $event = Event::find($id);
+        $event->name = $data['name'];
+        $event->description = $data['description'];
+        $event->start_date = $data['start_date'];
+        $event->end_date = $data['end_date'];
+
+        // $event->type()->associate($type);
+
+        $event->save();
+
+        // $event->technologies()->sync($data['technology_id']);
+
+        return redirect()->route('event.home');
     }
 
     /**
@@ -81,6 +126,10 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $event = Event::find($id);
+
+        $event->delete();
+
+        return redirect()->route('event.home')->with('success', 'Evento eliminato!');
     }
 }
