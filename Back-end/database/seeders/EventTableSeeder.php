@@ -5,18 +5,19 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+use App\Models\Event;
+
+class EventTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        $this->call([
-
-            EventTableSeeder::class,
-        ]);
+        Event::factory()
+            ->count(20)
+            ->create();
     }
 }
