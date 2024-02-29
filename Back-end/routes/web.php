@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,8 @@ use App\Http\Controllers\EventController;
 */
 
 Route::get('/events', [EventController::class, 'index'])->name('event.home');
+
+Route::get('/tags', [TagController::class, 'index'])->name('tag');
 
 
 Route::get('/dashboard', function () {
