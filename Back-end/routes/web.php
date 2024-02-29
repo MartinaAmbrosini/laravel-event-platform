@@ -17,7 +17,7 @@ use App\Http\Controllers\TagController;
 |
 */
 
-Route::get('/events', [EventController::class, 'index'])->name('event.home');
+Route::get('/', [EventController::class, 'index'])->name('event.home');
 
 Route::get('/tags', [TagController::class, 'index'])->name('tag');
 
