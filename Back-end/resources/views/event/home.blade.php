@@ -7,7 +7,10 @@
 
     
     <h1>EVENTS</h1>
+    {{-- @auth --}}
         <a href="{{ route('event.create') }}">CREATE</a>
+    {{-- @endauth --}}
+
         <ul>
             @foreach ($events as $event)
                 <li>
@@ -18,7 +21,7 @@
                     <ul>
                         @foreach ($event -> tags as $tag)
                             <li>
-                                {{ $tag -> name }}
+                                {{ $tag -> title }}
                             </li>
                         @endforeach
                     </ul>

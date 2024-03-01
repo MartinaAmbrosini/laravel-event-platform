@@ -30,7 +30,7 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
         $tags = Tag::all();
         // $events = Event::all();
@@ -57,7 +57,7 @@ class EventController extends Controller
         $newEvent->start_date = $data['start_date'];
         $newEvent->end_date = $data['end_date'];
         $newEvent->user()->associate($user);
-        
+
         $newEvent->save();
     
         // Aggiunta dei tag all'evento
@@ -86,15 +86,28 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    // public function edit($id)
+    // {
+    //     $event = Event::find($id);
+
+    //     $tags = Tag::all();
+
+    //     return view('event.edit', compact('event', 'tags'));
+    // }
+
     public function edit($id)
     {
-        // $tags = Tag::all();
-
         $event = Event::find($id);
+
+        if($event->user_id !== Auth::id()) {
+            return redirect()->route('event.show', $event -> id)->with('error', 'Non hai il permesso di modificare questo evento.');
+        }
+
         $tags = Tag::all();
 
         return view('event.edit', compact('event', 'tags'));
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -133,6 +146,10 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::find($id);
+
+        if($event->user_id !== Auth::id()) {
+            return redirect()->route('event.show', $event -> id)->with('error', 'Non hai il permesso di eliminare questo evento.');
+        }
 
         $event->tags()->detach();
 

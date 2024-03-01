@@ -2,7 +2,7 @@
 @section('content')
 
 <h1>CREATE</h1>
-@auth
+{{-- @auth --}}
 <form action="{{route('event.store')}}" method="POST">
 
     @csrf
@@ -32,5 +32,5 @@
     <input type="submit" value="CREA">
     
     </form>
-@endauth
+{{-- @endauth --}}
 @endsection
