@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 use App\Models\Tag;
+
 // use App\Models\User;
 
 class EventController extends Controller
@@ -44,7 +45,7 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-
+        // dd($data);
 
         $newEvent = new Event();
 
@@ -55,9 +56,9 @@ class EventController extends Controller
 
         $newEvent->save();
 
-        $newEvent->tags()->attach($data['tags']);
+        $newEvent->tags()->attach($data['tag_id']);
 
-        return redirect() -> route('event.show', $newEvent -> id);
+        return redirect()->route('event.show', $newEvent->id);
     }
 
     /**
@@ -84,7 +85,7 @@ class EventController extends Controller
         // $tags = Tag::all();
 
         $event = Event::find($id);
-        $tags = Tag :: all();
+        $tags = Tag::all();
 
         return view('event.edit', compact('event', 'tags'));
     }
@@ -112,7 +113,7 @@ class EventController extends Controller
 
         $event->save();
 
-        $event -> tags() -> sync($data['tags']);
+        // $event->tags()->sync($data['tags']);
 
         return redirect()->route('event.home');
     }
@@ -127,7 +128,7 @@ class EventController extends Controller
     {
         $event = Event::find($id);
 
-        $event -> tags() -> detach();
+        $event->tags()->detach();
 
         $event->delete();
 
