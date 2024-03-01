@@ -21,14 +21,14 @@ class EventTableSeeder extends Seeder
         Event::factory()
             ->count(20)
             ->make()
-            ->each(function ($events) {
-                $users = User::inRandomOrder()->first();
-                $events->user()->associate($users);
+            ->each(function ($event) {
+                $user = User::inRandomOrder()->first();
+                $event->user()->associate($user);
 
-                $events->save();
+                $event->save();
 
                 $tags = Tag::inRandomOrder()->take(3)->get();
-                $events->tags()->attach($tags);
+                $event->tags()->attach($tags);
 
 
             });

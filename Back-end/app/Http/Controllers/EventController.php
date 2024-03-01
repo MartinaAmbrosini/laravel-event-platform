@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Event;
 use App\Models\Tag;
+// use App\Models\User;
 
 // use App\Models\User;
 
@@ -42,24 +44,28 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
     public function store(Request $request)
     {
         $data = $request->all();
-        // dd($data);
+        $user = Auth::user();
+    
 
         $newEvent = new Event();
-
         $newEvent->name = $data['name'];
         $newEvent->description = $data['description'];
         $newEvent->start_date = $data['start_date'];
         $newEvent->end_date = $data['end_date'];
-
+        $newEvent->user()->associate($user);
+        
         $newEvent->save();
-
+    
+        // Aggiunta dei tag all'evento
         $newEvent->tags()->attach($data['tag_id']);
-
+    
         return redirect()->route('event.show', $newEvent->id);
     }
+    
 
     /**
      * Display the specified resource.
