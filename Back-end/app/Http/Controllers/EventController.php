@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 use App\Models\Tag;
+// use App\Models\User;
 
 class EventController extends Controller
 {
@@ -28,10 +29,10 @@ class EventController extends Controller
      */
     public function create()
     {
-        // $tags = Tag::all();
-        $events = Event::all();
+        $tags = Tag::all();
+        // $events = Event::all();
 
-        return view('event.create', compact('events'));
+        return view('event.create', compact(/*'events' ,*/ 'tags'));
     }
 
     /**
@@ -43,23 +44,20 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        // $image = $data['image'];
-        // $image_path = Storage::disk('public')->put('images', $image);
-        // $type = Type::find($data['type_id']);
+
 
         $newEvent = new Event();
 
         $newEvent->name = $data['name'];
         $newEvent->description = $data['description'];
-        // $newEvent->image = $image_path;
         $newEvent->start_date = $data['start_date'];
         $newEvent->end_date = $data['end_date'];
 
         $newEvent->save();
 
-        // $newEvent->tags()->attach($data['tag_id']);
+        $newEvent->tags()->attach($data['tags']);
 
-        return redirect()->route('event.home');
+        return redirect() -> route('event.show', $newEvent -> id);
     }
 
     /**
@@ -86,8 +84,9 @@ class EventController extends Controller
         // $tags = Tag::all();
 
         $event = Event::find($id);
+        $tags = Tag :: all();
 
-        return view('event.edit', compact('event'));
+        return view('event.edit', compact('event', 'tags'));
     }
 
     /**
@@ -113,7 +112,7 @@ class EventController extends Controller
 
         $event->save();
 
-        // $event->technologies()->sync($data['technology_id']);
+        $event -> tags() -> sync($data['tags']);
 
         return redirect()->route('event.home');
     }
@@ -127,6 +126,8 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::find($id);
+
+        $event -> tags() -> detach();
 
         $event->delete();
 
